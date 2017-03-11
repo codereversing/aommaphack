@@ -47,6 +47,7 @@ namespace AoMHackUI
         #endregion
 
         private IntPtr _hHook = IntPtr.Zero;
+        private IntPtr _hModule = IntPtr.Zero;
         private Process _gameProcess = null;
 
         public FormMain()
@@ -107,7 +108,7 @@ namespace AoMHackUI
                     comboBoxProcesses.Items.Add(process.MainModule.FileName);
 
                     string processPath = process.MainModule.FileName;
-                    if (processPath.Contains("aomx.exe"))
+                    if (processPath.Contains("aomx.exe") || processPath.Contains("aomxnocd.exe"))
                     {
                         aomPath = processPath;
                         index = comboBoxProcesses.Items.Count - 1;
@@ -146,6 +147,8 @@ namespace AoMHackUI
         private void _gameProcessExited(object sender, EventArgs e)
         {
             _resetUI();
+
+            FreeLibrary(_hModule);
 
             _toggleStartStopButtons(true, false);
         }
@@ -234,6 +237,7 @@ namespace AoMHackUI
             }
 
             labelDllHandleValue.Text = hModule.ToString("X");
+            _hModule = hModule;
 
             var pProc = GetProcAddress(hModule, "_KeyboardProc@12");
             if(pProc == IntPtr.Zero)
@@ -273,6 +277,8 @@ namespace AoMHackUI
                 MessageBox.Show("Could not remove map hack from process.");
             }
 
+            FreeLibrary(_hModule);
+            
             _toggleStartStopButtons(true, false);
         }
 

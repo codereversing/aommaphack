@@ -16,9 +16,13 @@ const bool IsBaseGame()
 
 const DWORD_PTR GetFunctionAddress(const DWORD_PTR dwOffset)
 {
-    const HMODULE hGameExecutable = GetModuleHandle(L"aomx.exe");
+    const HMODULE hGameExecutableBase = (HMODULE)0x00400000;
+    const HMODULE hGameExecutableExtended = GetModuleHandle(L"aomx.exe");
 
-    return (DWORD_PTR)hGameExecutable + dwOffset;
+    const DWORD_PTR dwBaseAddress = IsBaseGame() ? (DWORD_PTR)hGameExecutableBase :
+        (DWORD_PTR)hGameExecutableExtended;
+
+    return dwBaseAddress + dwOffset;
 }
 
 void ToggleMapStatus(const bool bEnableBlackOverlay, const bool bEnableFogOfWar)
