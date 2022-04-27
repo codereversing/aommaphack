@@ -28,7 +28,7 @@ const DWORD_PTR GetFunctionAddress(const DWORD_PTR dwOffset)
 void ToggleMapStatus(const bool bEnableBlackOverlay, const bool bEnableFogOfWar)
 {
     const DWORD_PTR dwOffsetMapToggleBase = 0x004AAEE0;
-    const DWORD_PTR dwOffsetMapToggleExtended = 0x00505D20;
+    const DWORD_PTR dwOffsetMapToggleExtended = 0x0050A030;
 
     const DWORD_PTR dwOffsetMapToggle = IsBaseGame() ? dwOffsetMapToggleBase : dwOffsetMapToggleExtended;
     pToggleMapFnc pToggleMap = (pToggleMapFnc)GetFunctionAddress(dwOffsetMapToggle);
